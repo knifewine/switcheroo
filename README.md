@@ -2,6 +2,8 @@
 ...Is a simple python program for switching a symlink target between choices.
 It's nice for working with software that looks in a single place for things (config files, git repositories, etc.) so you can point it to a new location without too much work.
 
+![switcheroo in action](https://cloud.githubusercontent.com/assets/123593/6198472/ecfc5ef8-b3c0-11e4-9578-bd1cd93c8681.png)
+
 # Huh?
 Lots of software likes to look in specific locations for files or directories.
 But you're clever so you tell that software about a symlink instead.
