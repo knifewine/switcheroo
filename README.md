@@ -6,8 +6,8 @@ It's nice for working with software that looks in a single place for things (con
 Lots of software likes to look in specific locations for files or directories.
 But you're clever so you tell that software about a symlink instead.
 And then you use this simple tool to change where the symlink points on demand.
-Then instead of copying files around or munging environment variables, your location is found through the symlink.
-Now you can keep multiple configs, directories, etc. for the program to use, and readily switch between them without it caring.
+Now instead of copying files around or munging environment variables, your location is found through the symlink.
+You can keep multiple configs, directories, etc. for the program to use, and readily switch between them.
 
 If the software you are using with switcheroo makes you tell it about the file/location with an environment variable like CONFIG_FILE, you can tell switcheroo about this environment variable and it will nag you to set the environment variable to the symlink location.
 
