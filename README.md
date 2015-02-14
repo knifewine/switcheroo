@@ -18,8 +18,12 @@ Switcheroo is meant to be aliased in your shell so you don't have to remember al
 
 Something like this in your .bashrc will get your a switcher with git branch awareness:
 
-    export CURRENT_LOCATION=/home/russ/important_location  # this is (or will become) a symbolic link
+    export CURRENT_LOCATION=/home/russ/symlinks/important_location  # this is (or will become) a symbolic link
     export LOCATION_CHOICES=/home/russ/important_ONE:/home/russ/important_TWO:/home/russ/some_other_wacky_place  # colon-delimited paths
-    alias switcher='switcheroo.py --symlink-file $CURRENT_LOCATION --options $LOCATION_CHOICES --chosen-env-var CURRENT_LOCATION --show-git-branch'
+    alias switcher='/home/russ/bin/switcheroo/switcheroo.py \
+      --symlink-file $CURRENT_LOCATION\
+      --options $LOCATION_CHOICES\
+      --chosen-env-var CURRENT_LOCATION\
+      --show-git-branch'
 
   

@@ -69,21 +69,21 @@ if (int_choice <= 0) or int_choice > len(possible_dirs):
     exit(1)
 
 
-if os.path.exists(symlink_path):
+if os.path.exists(symlink_path) and os.path.islink(symlink_path):
     # unlink symlink's current target
-    if os.path.islink(symlink_path):
-        os.unlink(symlink_path)
+    os.unlink(symlink_path)
 
-    os.symlink(possible_dirs[int_choice - 1], symlink_path)
-    if args.chosen_env_var:
-        print "{envvar} is {now} linked to {symlink_target}\n".format(
-            envvar=colorize(args.chosen_env_var, 'blue bold underline'),
-            now=colorize('now', 'red bold underline'),
-            symlink_target=colorize(os.readlink(symlink_path), 'green bold underline')
-        )
-    else:
-        print "symlink at {symlink_loc} is {now} linked to {symlink_target}\n".format(
-            symlink_loc=colorize(symlink_path, 'blue bold underline'),
-            now=colorize('now', 'red bold underline'),
-            symlink_target=colorize(os.readlink(symlink_path), 'green bold underline')
-        )
+os.symlink(possible_dirs[int_choice - 1], symlink_path)
+
+if args.chosen_env_var:
+    print "{envvar} is {now} linked to {symlink_target}\n".format(
+        envvar=colorize(args.chosen_env_var, 'blue bold underline'),
+        now=colorize('now', 'red bold underline'),
+        symlink_target=colorize(os.readlink(symlink_path), 'green bold underline')
+    )
+else:
+    print "symlink at {symlink_loc} is {now} linked to {symlink_target}\n".format(
+        symlink_loc=colorize(symlink_path, 'blue bold underline'),
+        now=colorize('now', 'red bold underline'),
+        symlink_target=colorize(os.readlink(symlink_path), 'green bold underline')
+    )
