@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 import argparse
 import os
-import subprocess
 from dumbcolor import colorize
+from gitsubprocess import branch_for_path
 
 
 parser = argparse.ArgumentParser()
@@ -23,8 +23,8 @@ symlink_path = os.path.abspath(args.symlink_file)
 # so this is optional, and not required if you just need to switch a symlink between targets
 # -- but assuming you are using some system that looks in $ENV_VAR (which contains a symlink path) it will warn you if unset or set wrong
 if args.chosen_env_var:
-    current_choice = os.environ.get(args.chosen_env_var, None)
-    if not current_choice == symlink_path:
+    env_var_path = os.environ.get(args.chosen_env_var, None)
+    if not env_var_path == symlink_path:
         print "please set {} to {}".format(args.chosen_env_var, symlink_path)
         print "  e.g. export {}={}".format(args.chosen_env_var, symlink_path)
         exit(1)
@@ -47,8 +47,7 @@ if os.path.exists(symlink_path) and os.path.islink(symlink_path):
 
 for idx, dirname in enumerate(possible_dirs, 1):
     if args.show_git_branch is True:
-        git_label = subprocess.check_output(["git", "status"], cwd=dirname).split("\n")[0]
-        print "{idx}. {dirname} ({git_label})".format(idx=idx, dirname=dirname, git_label=git_label)
+        print "{idx}. {dirname} ({git_label})".format(idx=idx, dirname=dirname, git_label=branch_for_path(dirname))
     else:
         print "{idx}. {dirname}".format(idx=idx, dirname=dirname)
 
@@ -68,12 +67,17 @@ if (int_choice <= 0) or int_choice > len(possible_dirs):
     print "invalid number"
     exit(1)
 
+proposed_target = possible_dirs[int_choice - 1]
+
+if not os.path.exists(proposed_target):
+    print "{error}: {proposed_target} doesn't seem to exist. quitting.".format(error=colorize('ERROR', 'red bold'), proposed_target=proposed_target)
+    exit(1)
 
 if os.path.exists(symlink_path) and os.path.islink(symlink_path):
     # unlink symlink's current target
     os.unlink(symlink_path)
 
-os.symlink(possible_dirs[int_choice - 1], symlink_path)
+os.symlink(proposed_target, symlink_path)
 
 if args.chosen_env_var:
     print "{envvar} is {now} linked to {symlink_target}\n".format(
