@@ -20,7 +20,6 @@ def colorize(text, color_declaration='blue bold'):
             if 'background' in words:
                 regcolor = ''
                 basecode = basecode + 10
-                print basecode
 
             if 'bold' in words:
                 bold = '1;'
