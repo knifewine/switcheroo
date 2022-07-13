@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3 -B
 import argparse
 import os
 from dumbcolor import colorize
@@ -25,52 +25,52 @@ symlink_path = os.path.abspath(args.symlink_file)
 if args.chosen_env_var:
     env_var_path = os.environ.get(args.chosen_env_var, None)
     if not env_var_path == symlink_path:
-        print "please set {} to {}".format(args.chosen_env_var, symlink_path)
-        print "  e.g. export {}={}".format(args.chosen_env_var, symlink_path)
+        print("please set {} to {}".format(args.chosen_env_var, symlink_path))
+        print("  e.g. export {}={}".format(args.chosen_env_var, symlink_path))
         exit(1)
 
 possible_dirs = [d for d in args.options.split(':') if len(d) > 0]
 
 if os.path.exists(symlink_path) and os.path.islink(symlink_path):
     if args.chosen_env_var:
-        print "{env_var} is {currently} linked to {target}\n".format(
+        print("{env_var} is {currently} linked to {target}\n".format(
             env_var=colorize(args.chosen_env_var, 'blue'),
             currently=colorize('currently', 'red'),
             target=colorize(os.readlink(symlink_path), 'green')
-        )
+        ))
     else:
-        print "symlink at {symlink_path} is {currently} linked to {target}\n".format(
+        print("symlink at {symlink_path} is {currently} linked to {target}\n".format(
             symlink_path=colorize(symlink_path, 'blue'),
             currently=colorize('currently', 'red'),
             target=colorize(os.readlink(symlink_path), 'green')
-        )
+        ))
 
 for idx, dirname in enumerate(possible_dirs, 1):
     if args.show_git_branch is True:
-        print "{idx}. {dirname} ({git_label})".format(idx=idx, dirname=dirname, git_label=branch_for_path(dirname))
+        print("{idx}. {dirname} ({git_label})".format(idx=idx, dirname=dirname, git_label=branch_for_path(dirname)))
     else:
-        print "{idx}. {dirname}".format(idx=idx, dirname=dirname)
+        print("{idx}. {dirname}".format(idx=idx, dirname=dirname))
 
-choice = raw_input("\nplease choose a number (enter to quit): ")
+choice = input("\nplease choose a number (enter to quit): ")
 
 try:
     int_choice = int(choice)
 except ValueError:
     if len(choice) == 0:
-        print "quitting"
+        print("quitting")
         exit(0)
 
-    print "invalid choice"
+    print("invalid choice")
     exit(1)
 
 if (int_choice <= 0) or int_choice > len(possible_dirs):
-    print "invalid number"
+    print("invalid number")
     exit(1)
 
 proposed_target = possible_dirs[int_choice - 1]
 
 if not os.path.exists(proposed_target):
-    print "{error}: {proposed_target} doesn't seem to exist. quitting.".format(error=colorize('ERROR', 'red bold'), proposed_target=proposed_target)
+    print("{error}: {proposed_target} doesn't seem to exist. quitting.".format(error=colorize('ERROR', 'red bold'), proposed_target=proposed_target))
     exit(1)
 
 if os.path.exists(symlink_path) and os.path.islink(symlink_path):
@@ -80,14 +80,14 @@ if os.path.exists(symlink_path) and os.path.islink(symlink_path):
 os.symlink(proposed_target, symlink_path)
 
 if args.chosen_env_var:
-    print "{envvar} is {now} linked to {symlink_target}\n".format(
+    print("{envvar} is {now} linked to {symlink_target}\n".format(
         envvar=colorize(args.chosen_env_var, 'blue bold underline'),
         now=colorize('now', 'red bold underline'),
         symlink_target=colorize(os.readlink(symlink_path), 'green bold underline')
-    )
+    ))
 else:
-    print "symlink at {symlink_loc} is {now} linked to {symlink_target}\n".format(
+    print("symlink at {symlink_loc} is {now} linked to {symlink_target}\n".format(
         symlink_loc=colorize(symlink_path, 'blue bold underline'),
         now=colorize('now', 'red bold underline'),
         symlink_target=colorize(os.readlink(symlink_path), 'green bold underline')
-    )
+    ))
