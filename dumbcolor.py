@@ -33,5 +33,5 @@ def colorize(text, color_declaration='blue bold'):
 
         return '{codes}{text}\033[0m'.format(codes=codes, text=text)
     except:
-        print "couldn't format text, something went wrong"
+        print("couldn't format text, something went wrong")
         return text
